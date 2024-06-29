@@ -1,6 +1,5 @@
-package org.scaler.ecommereceproductservice.model;
+package org.scaler.ecommereceproductservice.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +7,9 @@ import lombok.Setter;
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
-
 @Getter
 @Setter
-public class Product {
-    private int id;
+public class ProductResponseDTO {
     private String title;
     private String description;
     private String category;
