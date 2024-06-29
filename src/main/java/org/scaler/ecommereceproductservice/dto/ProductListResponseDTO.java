@@ -1,8 +1,10 @@
 package org.scaler.ecommereceproductservice.dto;
 
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author: Vijaysurya Mandala
@@ -10,10 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ProductRequestDTO {
-    private String title;
-    private String description;
-    private String category;
-    private String image;
-    private double price;
+@Builder
+public class ProductListResponseDTO {
+    private List<ProductResponseDTO> productResponseDTOList;
+
 }
