@@ -2,6 +2,7 @@ package org.scaler.ecommereceproductservice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Builder;
 
 /**
  * @author: Vijaysurya Mandala
@@ -9,6 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 public class ProductResponseDTO {
     private int id;
     private String title;

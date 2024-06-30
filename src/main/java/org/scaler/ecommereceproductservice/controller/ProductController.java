@@ -2,6 +2,7 @@ package org.scaler.ecommereceproductservice.controller;
 
 import lombok.AllArgsConstructor;
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
+import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
 import org.scaler.ecommereceproductservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +40,17 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long prod_id){
         return ResponseEntity.ok(productService.getProductById(prod_id));
     }
+    @PostMapping("/products")
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productRequestDTO){
+        return ResponseEntity.ok(productService.createProduct(productRequestDTO));
+    }
+    @PutMapping("/products/{product_id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long product_id, @RequestBody ProductRequestDTO productRequestDTO){
+        return ResponseEntity.ok(productService.updateProduct(product_id, productRequestDTO));
+    }
+    @DeleteMapping("/products/{product_id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long product_id){
+        return ResponseEntity.ok(productService.deleteProduct(product_id));
+    }
+
 }

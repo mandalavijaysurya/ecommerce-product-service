@@ -1,10 +1,9 @@
 package org.scaler.ecommereceproductservice.service;
 
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
+import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
 import org.scaler.ecommereceproductservice.model.Product;
-
-import java.util.List;
 
 /**
  * @author: Vijaysurya Mandala
@@ -16,7 +15,7 @@ public interface ProductService {
     ProductListResponseDTO getLimitedProducts(Long limit);
     ProductListResponseDTO getAllProductsAndSort(String sort);
     ProductListResponseDTO getAllProductsAndSortAndLimit(String sort, Long limit);
-    Product createProduct(Product product);
-    Product updateProduct(long id, Product product);
-    Product deleteProduct(long id);
+    ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO);
+    String updateProduct(long id, ProductRequestDTO productRequestDTO);
+    String deleteProduct(long id);
 }
