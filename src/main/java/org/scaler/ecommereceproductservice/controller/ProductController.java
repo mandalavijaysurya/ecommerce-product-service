@@ -3,18 +3,12 @@ package org.scaler.ecommereceproductservice.controller;
 import lombok.AllArgsConstructor;
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
-import org.scaler.ecommereceproductservice.model.Product;
 import org.scaler.ecommereceproductservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author: Vijaysurya Mandala
@@ -23,12 +17,26 @@ import java.util.List;
 @RestController
 public class ProductController {
 
+    private final ProductService productService;
+
     @Autowired
-    @Qualifier("fakeStoreProductService")
-    private ProductService productService;
+    public ProductController(@Qualifier("fakeStoreProductService")ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("/products")
-    public ProductListResponseDTO getAllProducts(){
-        return productService.getAllProducts();
+    public ResponseEntity<ProductListResponseDTO> getAllProducts(
+            @RequestParam(required = false) Long limit,
+            @RequestParam(required = false) String sort){
+        if(limit == null && sort == null)
+            return ResponseEntity.ok(productService.getAllProducts());
+        else if(sort == null)
+            return ResponseEntity.ok(productService.getLimitedProducts(limit));
+        else if(limit == null)   return ResponseEntity.ok(productService.getAllProductsAndSort(sort));
+        else return ResponseEntity.ok(productService.getAllProductsAndSortAndLimit(sort, limit));
+    }
+    @GetMapping("/products/{prod_id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long prod_id){
+        return ResponseEntity.ok(productService.getProductById(prod_id));
     }
 }
