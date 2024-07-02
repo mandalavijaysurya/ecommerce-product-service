@@ -1,21 +1,16 @@
 package org.scaler.ecommereceproductservice.service;
 
 import lombok.AllArgsConstructor;
-import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
-import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
-import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
-import org.scaler.ecommereceproductservice.model.Product;
+import org.scaler.ecommereceproductservice.client.FakeStoreAPIClient;
+import org.scaler.ecommereceproductservice.dto.*;
+import org.scaler.ecommereceproductservice.exception.ProductNotFoundException;
+import org.scaler.ecommereceproductservice.mapper.ProductMapper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static org.scaler.ecommereceproductservice.mapper.ProductMapper.fakeProductListResponseDTOToProductListResponseDTO;
+import static org.scaler.ecommereceproductservice.mapper.ProductMapper.fakeProductResponseToProductResponseDTO;
+import static org.scaler.ecommereceproductservice.util.ProductUtils.isNull;
 
 
 /**
@@ -27,54 +22,31 @@ import java.util.List;
 @AllArgsConstructor
 public class FakeStoreProductService implements ProductService {
 
-    private RestTemplateBuilder restTemplateBuilder;
+    private FakeStoreAPIClient fakeStoreAPIClient;
 
     @Override
     public ProductListResponseDTO getAllProducts() {
-        String getAllProductsUrl = "https://fakestoreapi.com/products";
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<List<ProductResponseDTO>> productResponse =
-                restTemplate.exchange(getAllProductsUrl, HttpMethod.GET,null,
-                        new ParameterizedTypeReference<List<ProductResponseDTO>>() {});
-        return ProductListResponseDTO.builder().productResponseDTOList(productResponse.getBody()).build();
+        FakeStoreProductListResponseDTO fakeStoreProductListResponseDTO = fakeStoreAPIClient.getAllProducts();
+        return fakeProductListResponseDTOToProductListResponseDTO(fakeStoreProductListResponseDTO);
     }
 
     @Override
-    public ProductResponseDTO getProductById(Long id) {
-        String getProductsByIdUrl = "https://fakestoreapi.com/products/" + id;
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<ProductResponseDTO> response =
-                restTemplate.exchange(getProductsByIdUrl, HttpMethod.GET, null, ProductResponseDTO.class);
-        return response.getBody();
+    public ProductResponseDTO getProductById(Long id) throws ProductNotFoundException {
+        FakeStoreProductResponseDTO fakeStoreProductDTO = fakeStoreAPIClient.getProductById(id);
+        if(isNull(fakeStoreProductDTO))
+            throw new ProductNotFoundException("Product not found with id: " + id);
+        return fakeProductResponseToProductResponseDTO(fakeStoreProductDTO);
     }
 
     @Override
     public ProductListResponseDTO getLimitedProducts(Long limit) {
-        String getLimitedProductsBaseUrl = "https://fakestoreapi.com/products/";
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(getLimitedProductsBaseUrl)
-                .queryParam("limit", limit);
-        String getLimitedProductsUrl = uriBuilder.toUriString();
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<ProductResponseDTO[]> limitedProducts = restTemplate.exchange(getLimitedProductsUrl, HttpMethod.GET, null,
-                ProductResponseDTO[].class);
-        List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
-        productResponseDTOList.addAll(Arrays.asList(limitedProducts.getBody()));
-        ProductListResponseDTO productListResponseDTO = ProductListResponseDTO.builder()
-                .productResponseDTOList(productResponseDTOList)
-                .build();
-        return productListResponseDTO;
+        return fakeProductListResponseDTOToProductListResponseDTO(fakeStoreAPIClient.getLimitedProducts(limit));
     }
 
     @Override
     public ProductListResponseDTO getAllProductsAndSort(String sort) {
-        String getAllProductsUrl = "https://fakestoreapi.com/products";
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(getAllProductsUrl)
-                .queryParam("sort", sort);
-        getAllProductsUrl = uriBuilder.toUriString();
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<List<ProductResponseDTO>> limitedProducts = restTemplate.exchange(getAllProductsUrl, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<ProductResponseDTO>>() {});
-        return ProductListResponseDTO.builder().productResponseDTOList(limitedProducts.getBody()).build();
+       FakeStoreProductListResponseDTO fakeStoreProductListResponseDTO = fakeStoreAPIClient.getAllProductsAndSort(sort);
+        return ProductMapper.fakeProductListResponseDTOToProductListResponseDTO(fakeStoreProductListResponseDTO);
     }
     @Override
     public ProductListResponseDTO getAllProductsAndSortAndLimit(String sort, Long limit) {
@@ -85,25 +57,19 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO) {
-        String createUrl = "https://fakestoreapi.com/products";
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        ResponseEntity<ProductResponseDTO> productResponse = restTemplate.postForEntity(createUrl, productRequestDTO, ProductResponseDTO.class);
-        return productResponse.getBody();
+        FakeStoreProductRequestDTO fakeStoreProductRequestDTO = ProductMapper.productRequestToFakeStoreProductRequestDTO(productRequestDTO);
+        FakeStoreProductResponseDTO fakeStoreProductDTO = fakeStoreAPIClient.createProduct(fakeStoreProductRequestDTO);
+        return fakeProductResponseToProductResponseDTO(fakeStoreProductDTO);
     }
 
     @Override
     public String updateProduct(long id, ProductRequestDTO productRequestDTO) {
-        String updateUrl = "https://fakestoreapi.com/products/" + id;
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        restTemplate.put(updateUrl,productRequestDTO);
-        return "Product have been updated";
+        FakeStoreProductRequestDTO fakeStoreProductRequestDTO = ProductMapper.productRequestToFakeStoreProductRequestDTO(productRequestDTO);
+        return fakeStoreAPIClient.updateProduct(id, fakeStoreProductRequestDTO);
     }
 
     @Override
     public String deleteProduct(long id) {
-        String deleteUrl = "https://fakestoreapi.com/products/" + id;
-        RestTemplate restTemplate = restTemplateBuilder.build();
-        restTemplate.delete(deleteUrl);
-        return "Product has been deleted";
+        return fakeStoreAPIClient.deleteProduct(id);
     }
 }

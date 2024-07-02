@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
 import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
+import org.scaler.ecommereceproductservice.exception.ProductNotFoundException;
 import org.scaler.ecommereceproductservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +38,7 @@ public class ProductController {
         else return ResponseEntity.ok(productService.getAllProductsAndSortAndLimit(sort, limit));
     }
     @GetMapping("/products/{prod_id}")
-    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long prod_id){
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long prod_id) throws ProductNotFoundException {
         return ResponseEntity.ok(productService.getProductById(prod_id));
     }
     @PostMapping("/products")

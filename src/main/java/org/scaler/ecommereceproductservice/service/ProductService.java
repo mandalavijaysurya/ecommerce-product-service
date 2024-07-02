@@ -3,6 +3,7 @@ package org.scaler.ecommereceproductservice.service;
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
 import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
+import org.scaler.ecommereceproductservice.exception.ProductNotFoundException;
 import org.scaler.ecommereceproductservice.model.Product;
 
 /**
@@ -11,7 +12,7 @@ import org.scaler.ecommereceproductservice.model.Product;
  */
 public interface ProductService {
     ProductListResponseDTO getAllProducts();
-    ProductResponseDTO getProductById(Long id);
+    ProductResponseDTO getProductById(Long id) throws ProductNotFoundException;
     ProductListResponseDTO getLimitedProducts(Long limit);
     ProductListResponseDTO getAllProductsAndSort(String sort);
     ProductListResponseDTO getAllProductsAndSortAndLimit(String sort, Long limit);
