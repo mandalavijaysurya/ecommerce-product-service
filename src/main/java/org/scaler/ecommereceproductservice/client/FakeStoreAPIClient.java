@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author: Vijaysurya Mandala
@@ -81,11 +82,9 @@ public class FakeStoreAPIClient {
         RestTemplate restTemplate = restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductResponseDTO[]> limitedProducts = restTemplate.exchange(getLimitedProductsUrl, HttpMethod.GET, null,
                 FakeStoreProductResponseDTO[].class);
-        List<FakeStoreProductResponseDTO> fakeProductResponseDTOList = new ArrayList<>();
-        fakeProductResponseDTOList.addAll(Arrays.asList(limitedProducts.getBody()));
-        FakeStoreProductListResponseDTO fakeStoreProductListResponseDTO = FakeStoreProductListResponseDTO.builder()
+        List<FakeStoreProductResponseDTO> fakeProductResponseDTOList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(limitedProducts.getBody())));
+        return FakeStoreProductListResponseDTO.builder()
                 .fakeStoreProductListResponseDTO(fakeProductResponseDTOList)
                 .build();
-        return fakeStoreProductListResponseDTO;
     }
 }
