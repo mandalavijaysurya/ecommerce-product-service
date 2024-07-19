@@ -1,8 +1,11 @@
 package org.scaler.ecommereceproductservice.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * @author: Vijaysurya Mandala

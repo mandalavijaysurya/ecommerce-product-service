@@ -22,7 +22,7 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public ProductController(@Qualifier("fakeStoreProductService")ProductService productService) {
+    public ProductController(@Qualifier("productService")ProductService productService) {
         this.productService = productService;
     }
 
@@ -40,6 +40,10 @@ public class ProductController {
     @GetMapping("/products/{prod_id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long prod_id) throws ProductNotFoundException {
         return ResponseEntity.ok(productService.getProductById(prod_id));
+    }
+    @GetMapping("/products/title/{title}")
+    public ResponseEntity<ProductResponseDTO> getProductByTitle(@PathVariable String title) throws ProductNotFoundException {
+        return ResponseEntity.ok(productService.getProductByTitle(title));
     }
     @PostMapping("/products")
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productRequestDTO){

@@ -16,5 +16,4 @@ import java.util.List;
 @Builder
 public class ProductListResponseDTO {
     private List<ProductResponseDTO> productResponseDTOList;
-
 }

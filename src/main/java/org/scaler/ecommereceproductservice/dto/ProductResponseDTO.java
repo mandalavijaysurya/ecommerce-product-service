@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 
+import java.util.UUID;
+
 /**
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
@@ -12,7 +14,7 @@ import lombok.Builder;
 @Setter
 @Builder
 public class ProductResponseDTO {
-    private int id;
+    private String id;
     private String title;
     private double price;
     private String description;

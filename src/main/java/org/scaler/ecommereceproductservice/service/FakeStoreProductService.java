@@ -72,4 +72,9 @@ public class FakeStoreProductService implements ProductService {
     public String deleteProduct(long id) {
         return fakeStoreAPIClient.deleteProduct(id);
     }
+
+    @Override
+    public ProductResponseDTO getProductByTitle(String title) {
+        return null;
+    }
 }

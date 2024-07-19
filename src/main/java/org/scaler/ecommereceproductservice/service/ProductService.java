@@ -19,4 +19,5 @@ public interface ProductService {
     ProductResponseDTO createProduct(ProductRequestDTO productRequestDTO);
     String updateProduct(long id, ProductRequestDTO productRequestDTO);
     String deleteProduct(long id);
+    ProductResponseDTO getProductByTitle(String title);
 }

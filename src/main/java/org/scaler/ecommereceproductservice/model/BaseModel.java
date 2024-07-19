@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 import org.hibernate.annotations.GenericGenerator;
 import org.scaler.ecommereceproductservice.annotation.UUID4Generator;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 @MappedSuperclass
+@Getter
 public abstract class BaseModel {
     @Id
     @GeneratedValue(generator = "uuid-v6-generator")

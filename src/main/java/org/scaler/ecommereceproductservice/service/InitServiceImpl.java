@@ -1,7 +1,7 @@
 package org.scaler.ecommereceproductservice.service;
 
 import org.scaler.ecommereceproductservice.model.Category;
-import org.scaler.ecommereceproductservice.model.EcomOrder;
+import org.scaler.ecommereceproductservice.model.Order;
 import org.scaler.ecommereceproductservice.model.Price;
 import org.scaler.ecommereceproductservice.model.Product;
 import org.scaler.ecommereceproductservice.repository.CategoryRepository;
@@ -54,19 +54,19 @@ public class InitServiceImpl implements InitService {
         priceRepository.save(priceWatch);
 
         Product iphone = new Product();
-        iphone.setCategory(electronics);
+        iphone.setCategory(savedCategory);
         iphone.setPrice(priceIphone);
         iphone.setTitle("Iphone 15 pro");
         iphone.setImage("https://iphone-15-pro-image");
         iphone.setDescription("Best Iphone ever");
         Product macBook = new Product();
-        macBook.setCategory(electronics);
+        macBook.setCategory(savedCategory);
         macBook.setPrice(priceMacbook);
         macBook.setTitle("Macbook pro 16");
         macBook.setImage("https://macbook-pro-16-image");
         macBook.setDescription("Best Macbook ever");
         Product watch = new Product();
-        watch.setCategory(electronics);
+        watch.setCategory(savedCategory);
         watch.setPrice(priceWatch);
         watch.setTitle("Watch series 10");
         watch.setImage("https://watch-series-10-image");
@@ -76,7 +76,9 @@ public class InitServiceImpl implements InitService {
         productRepository.save(macBook);
         productRepository.save(watch);
 
-        EcomOrder order = new EcomOrder();
+        categoryRepository.save(savedCategory);
+
+        Order order = new Order();
         order.setProducts(List.of(iphone, macBook, watch));
         orderRepository.save(order);
     }

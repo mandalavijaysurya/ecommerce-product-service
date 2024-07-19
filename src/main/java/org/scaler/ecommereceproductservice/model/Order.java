@@ -17,8 +17,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class EcomOrder extends BaseModel {
+@Entity(name = "ECOM_ORDER")
+public class Order extends BaseModel {
     @ManyToMany
     private List<Product> products;
 }

@@ -1,10 +1,11 @@
 package org.scaler.ecommereceproductservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
 
 
 /**
@@ -14,14 +15,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "PRODUCT")
+@Entity(name = "ECOM_PRODUCT")
+@ToString
 public class Product extends BaseModel{
     private String title;
     private String description;
-    @ManyToOne
-    private Category category;
     private String image;
     @OneToOne
     private Price price;
-
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+//    @ManyToMany(mappedBy = "products")
+//    private List<Order> orders;
 }

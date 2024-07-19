@@ -27,7 +27,7 @@ public class ProductMapper {
                 .image(fakeStoreProductResponseDTO.getImage())
                 .category(fakeStoreProductResponseDTO.getCategory())
                 .description(fakeStoreProductResponseDTO.getDescription())
-                .id(fakeStoreProductResponseDTO.getId()).build();
+                .id(fakeStoreProductResponseDTO.getId()+"").build();
     }
     public static ProductListResponseDTO fakeProductListResponseDTOToProductListResponseDTO(FakeStoreProductListResponseDTO fakeStoreProductListResponseDTO) {
         List<ProductResponseDTO> productResponseDTOList = new ArrayList<>();
@@ -35,5 +35,30 @@ public class ProductMapper {
             productResponseDTOList.add(fakeProductResponseToProductResponseDTO(fakeStoreProductResponseDTO));
         }
         return ProductListResponseDTO.builder().productResponseDTOList(productResponseDTOList).build();
+    }
+    public static ProductListResponseDTO convertProductListToProductListResponseDTO(List<Product> products) {
+        return ProductListResponseDTO.builder()
+                .productResponseDTOList(products.stream()
+                        .map( i ->  (
+                            ProductResponseDTO.builder()
+                                    .id(i.getId().toString())
+                                    .price(i.getPrice().getAmount())
+                                    .description(i.getDescription())
+                                    .category(i.getCategory().getCategoryName())
+                                    .title(i.getTitle())
+                                    .image(i.getImage())
+                                    .build()
+                        )
+                ).toList()).build();
+    }
+    public static ProductResponseDTO convertProductToProductResponseDTO(Product product){
+        return ProductResponseDTO.builder()
+                .image(product.getImage())
+                .id(product.getId().toString())
+                .price(product.getPrice().getAmount())
+                .title(product.getTitle())
+                .category(product.getCategory().getCategoryName())
+                .description(product.getDescription())
+                .build();
     }
 }
