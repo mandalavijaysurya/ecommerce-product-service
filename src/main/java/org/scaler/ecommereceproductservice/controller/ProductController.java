@@ -1,6 +1,5 @@
 package org.scaler.ecommereceproductservice.controller;
 
-import lombok.AllArgsConstructor;
 import org.scaler.ecommereceproductservice.dto.ProductListResponseDTO;
 import org.scaler.ecommereceproductservice.dto.ProductRequestDTO;
 import org.scaler.ecommereceproductservice.dto.ProductResponseDTO;
