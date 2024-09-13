@@ -1,10 +1,8 @@
 package org.scaler.ecommerceproductservice.models;
 
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author: Vijaysurya Mandala
@@ -16,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 public class Price extends BaseModel{
     private String currencyCode;
     private double amount;
