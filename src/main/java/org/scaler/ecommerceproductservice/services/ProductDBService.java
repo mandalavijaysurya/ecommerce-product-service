@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 
 
-@Service
+@Service("productDBService")
 public class ProductDBService implements ProductService{
 
     // Inject ProductRepository, CategoryRepository and PriceRepository using constructor injection

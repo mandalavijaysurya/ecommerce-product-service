@@ -3,6 +3,7 @@ package org.scaler.ecommerceproductservice.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author: Vijaysurya Mandala
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ProductRequestDTO {
     private String productName;
     private String productDescription;
