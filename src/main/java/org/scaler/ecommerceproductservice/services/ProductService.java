@@ -11,7 +11,7 @@ import java.util.UUID;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 public interface ProductService {
-    List<Product> productList();
+    List<Product> getAllProducts(int limit, int offset);
     Product getProduct(String title);
     List<Product> getLimitedProducts(Long limit);
     List<Product>  getAllProductsAndSort(String sort);
