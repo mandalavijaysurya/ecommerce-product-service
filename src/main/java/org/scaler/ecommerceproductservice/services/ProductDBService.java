@@ -28,12 +28,10 @@ public class ProductDBService implements ProductService{
     // Inject ProductRepository, CategoryRepository and PriceRepository using constructor injection
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final PriceRepository priceRepository;
 
-    public ProductDBService(ProductRepository productRepository, CategoryRepository categoryRepository, PriceRepository priceRepository) {
+    public ProductDBService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.priceRepository = priceRepository;
     }
 
     // Implement this method to return all products, use productRepository to fetch all products in paginated manner
@@ -66,11 +64,11 @@ public class ProductDBService implements ProductService{
         if(sort == null){
             return productRepository.findAll();
         }
-        Optional<List<Product>> productsList = productRepository.findAllAndSort(sort);
+        List<Product> productsList = productRepository.findAll();
         if(productsList.isEmpty()){
             throw new ProductNotFoundException("No products found");
         }
-        return productsList.get();
+        return productsList;
     }
 
     @Override
@@ -78,11 +76,11 @@ public class ProductDBService implements ProductService{
         if(sort == null){
             return getAllProducts(limit, offset);
         }
-        Optional<List<Product>> productsList = productRepository.findAllAndSort(sort);
+        List<Product> productsList = productRepository.findAll();
         if(productsList.isEmpty()){
             throw new ProductNotFoundException("No products found");
         }
-        return productsList.get();
+        return productsList;
     }
 
     @Override
@@ -90,7 +88,7 @@ public class ProductDBService implements ProductService{
         Price price = Price.builder().amount(amount).discount(discount).currencyCode(currencyCode).build();
         Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
         if(categoryOptional.isEmpty()){
-            throw new CategoryNotFoundException("Category " + categoryName + "not found, please create category first");
+            throw new CategoryNotFoundException("Category " + categoryName + " not found, please create category first");
         }
         Category category = categoryOptional.get();
         Product product = Product.builder()
