@@ -10,6 +10,7 @@ import lombok.Setter;
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
+
 @Entity(name = "prices")
 @AllArgsConstructor
 @NoArgsConstructor
