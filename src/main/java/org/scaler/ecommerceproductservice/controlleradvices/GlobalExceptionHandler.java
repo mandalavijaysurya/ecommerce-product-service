@@ -2,7 +2,9 @@ package org.scaler.ecommerceproductservice.controlleradvices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.scaler.ecommerceproductservice.dtos.ErrorResponseDTO;
+import org.scaler.ecommerceproductservice.exceptions.CategoryAlreadyExistsException;
 import org.scaler.ecommerceproductservice.exceptions.CategoryNotFoundException;
+import org.scaler.ecommerceproductservice.exceptions.InvalidTokenException;
 import org.scaler.ecommerceproductservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +40,27 @@ public class GlobalExceptionHandler {
                 .timestamp(now())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidTokenException(HttpServletRequest request, InvalidTokenException invalidTokenException) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .message(invalidTokenException.getMessage())
+                .statusCode("401")
+                .path(request.getRequestURI())
+                .timestamp(now())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCategoryAlreadyExistsException(HttpServletRequest request, CategoryAlreadyExistsException categoryAlreadyExistsException) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .message(categoryAlreadyExistsException.getMessage())
+                .statusCode("409")
+                .path(request.getRequestURI())
+                .timestamp(now())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseDTO);
     }
 }

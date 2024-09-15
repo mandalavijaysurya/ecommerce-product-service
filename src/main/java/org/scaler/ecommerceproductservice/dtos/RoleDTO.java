@@ -1,22 +1,16 @@
 package org.scaler.ecommerceproductservice.dtos;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author: Vijaysurya Mandala
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
-@Builder
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequestDTO {
-    @NotEmpty
-    @NotNull
+public class RoleDTO {
     private String name;
 }

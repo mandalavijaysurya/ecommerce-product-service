@@ -1,12 +1,12 @@
 package org.scaler.ecommerceproductservice.services;
 
+import org.scaler.ecommerceproductservice.exceptions.CategoryAlreadyExistsException;
 import org.scaler.ecommerceproductservice.exceptions.CategoryNotFoundException;
 import org.scaler.ecommerceproductservice.exceptions.ProductNotFoundException;
 import org.scaler.ecommerceproductservice.models.Category;
 import org.scaler.ecommerceproductservice.models.Price;
 import org.scaler.ecommerceproductservice.models.Product;
 import org.scaler.ecommerceproductservice.repositories.CategoryRepository;
-import org.scaler.ecommerceproductservice.repositories.PriceRepository;
 import org.scaler.ecommerceproductservice.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.time.LocalDateTime.now;
 
 /**
  * @author: Vijaysurya Mandala
@@ -97,6 +99,9 @@ public class ProductDBService implements ProductService{
                 .image(imageURL)
                 .category(category)
                 .price(price)
+                .createdAt(now())
+                .updatedAt(now())
+                .deleted(false)
                 .build();
         return productRepository.save(product);
     }
@@ -134,6 +139,7 @@ public class ProductDBService implements ProductService{
         if(currencyCode != null && !currencyCode.isEmpty()){
             product.getPrice().setCurrencyCode(currencyCode);
         }
+        product.setUpdatedAt(now());
         productRepository.save(product);
         return "Product updated successfully";
     }
@@ -144,7 +150,24 @@ public class ProductDBService implements ProductService{
         if(productOptional.isEmpty()){
             throw new ProductNotFoundException("Product not found");
         }
-        productRepository.delete(productOptional.get());
+        Product product = productOptional.get();
+        product.setDeleted(true);
+        product.setUpdatedAt(now());
+        productRepository.delete(product);
         return "Product deleted successfully";
+    }
+
+    @Override
+    public Category createCategory(String categoryName) {
+        Optional<Category> categoryOptional = categoryRepository.findByName(categoryName);
+        if(categoryOptional.isPresent()){
+            throw new CategoryAlreadyExistsException("Category already exists");
+        }
+        Category category = Category.builder()
+                .name(categoryName)
+                .createdAt(now())
+                .updatedAt(now())
+                .build();
+        return categoryRepository.save(category);
     }
 }

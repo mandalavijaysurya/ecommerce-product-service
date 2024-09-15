@@ -1,7 +1,9 @@
 package org.scaler.ecommerceproductservice.commons;
 
+import org.scaler.ecommerceproductservice.dtos.CategoryResponseDTO;
 import org.scaler.ecommerceproductservice.dtos.ProductListResponseDTO;
 import org.scaler.ecommerceproductservice.dtos.ProductResponseDTO;
+import org.scaler.ecommerceproductservice.models.Category;
 import org.scaler.ecommerceproductservice.models.Product;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ public class ProductUtils {
 
     public static ProductResponseDTO convertProductToProductResponseDTO(Product product) {
         return ProductResponseDTO.builder()
+                .productName(product.getTitle())
+                .productDescription(product.getDescription())
                 .productCategory(product.getCategory().getName())
                 .productImageURL(product.getImage())
                 .productPrice(product.getPrice().getCurrencyCode() + " " + getPrice(product.getPrice().getAmount(), product.getPrice().getDiscount()))
@@ -32,6 +36,12 @@ public class ProductUtils {
         }
         return ProductListResponseDTO.builder()
                 .productResponse(productResponseDTOs)
+                .build();
+    }
+
+    public static CategoryResponseDTO convertCategoryToCategoryResponseDTO(Category category) {
+        return CategoryResponseDTO.builder()
+                .categoryName(category.getName())
                 .build();
     }
 }

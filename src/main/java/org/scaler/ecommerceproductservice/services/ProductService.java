@@ -1,5 +1,6 @@
 package org.scaler.ecommerceproductservice.services;
 
+import org.scaler.ecommerceproductservice.models.Category;
 import org.scaler.ecommerceproductservice.models.Product;
 
 import java.awt.color.ProfileDataException;
@@ -20,4 +21,5 @@ public interface ProductService {
     Product createProduct(String title, String description, String imageURL, String categoryName, double amount, double discount, String currencyCode);
     String updateProduct(UUID id, String title, String description, String imageURL, String category, double amount, double discount, String currencyCode);
     String deleteProduct(UUID id);
+    Category createCategory(String categoryName);
 }

@@ -1,9 +1,8 @@
 package org.scaler.ecommerceproductservice.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 /**
  * @author: Vijaysurya Mandala
@@ -14,12 +13,21 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ProductRequestDTO {
+    @NotNull
     private String productName;
+    @NotNull
     private String productDescription;
+    @NotNull
+    @NotEmpty
     private String imageURL;
+    @NotNull
     private String categoryName;
+    @NotNull
     private double amount;
+    @NotNull
     private double discount;
+    @NotNull
     private String currencyCode;
 }

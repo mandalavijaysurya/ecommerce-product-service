@@ -21,7 +21,7 @@ public class Product extends BaseModel{
     private String title;
     private String description;
     private String image;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Price price;
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
