@@ -33,10 +33,13 @@ public class ProductController {
 
     @GetMapping("/")
     public ResponseEntity<ProductListResponseDTO> getAllProducts(@RequestHeader String token, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
+        /*
+
         UserDTO userDTO = authenticationCommons.validateToken(token);
         if(userDTO == null){
             throw new InvalidTokenException("Invalid Token");
         }
+        */
         ProductListResponseDTO responseDTO = ProductUtils.convertProductListToProductListResponseDTO(productService.getAllProducts(limit, offset));
         return ResponseEntity.ok(responseDTO);
     }
@@ -50,10 +53,12 @@ public class ProductController {
 
     @PostMapping("/")
     public ResponseEntity<ProductResponseDTO> addProduct(@RequestHeader("Authorization") String token, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
+        /*
         UserDTO userDTO = authenticationCommons.validateToken(token);
         if(userDTO == null){
             throw new InvalidTokenException("Invalid Token");
         }
+        */
         log.info("productRequestDTO: {}", productRequestDTO);
         Product product = productService.createProduct(productRequestDTO.getProductName(), productRequestDTO.getProductDescription(), productRequestDTO.getImageURL(), productRequestDTO.getCategoryName(), productRequestDTO.getAmount(), productRequestDTO.getDiscount(), productRequestDTO.getCurrencyCode());
         ProductResponseDTO responseDTO = ProductUtils.convertProductToProductResponseDTO(product);

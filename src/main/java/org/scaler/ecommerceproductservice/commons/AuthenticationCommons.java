@@ -29,7 +29,7 @@ public class AuthenticationCommons {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", token);
         ResponseEntity<UserDTO> responseEntity = restTemplate.exchange("http://localhost:8080/auth/validate",
-                HttpMethod.POST, new HttpEntity<>(headers), new ParameterizedTypeReference<UserDTO>() {
+                HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<UserDTO>() {
                 });
         return responseEntity.getBody();
     }

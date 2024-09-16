@@ -2,6 +2,7 @@ package org.scaler.ecommerceproductservice.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -13,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDTO {
+@Getter
+public class UserDTO{
     private String name;
     private String email;
     private List<RoleDTO> roles;
