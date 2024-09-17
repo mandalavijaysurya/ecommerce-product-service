@@ -2,10 +2,8 @@ package org.scaler.ecommerceproductservice.controllers;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.scaler.ecommerceproductservice.commons.AuthenticationCommons;
 import org.scaler.ecommerceproductservice.commons.ProductUtils;
 import org.scaler.ecommerceproductservice.dtos.*;
-import org.scaler.ecommerceproductservice.exceptions.InvalidTokenException;
 import org.scaler.ecommerceproductservice.models.Category;
 import org.scaler.ecommerceproductservice.models.Product;
 import org.scaler.ecommerceproductservice.services.ProductService;
@@ -25,14 +23,12 @@ public class ProductController {
 
     // Inject ProductService using constructor injection
     private final ProductService productService;
-    private final AuthenticationCommons authenticationCommons;
-    public ProductController(ProductService productService, AuthenticationCommons authenticationCommons) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.authenticationCommons = authenticationCommons;
     }
 
     @GetMapping("/")
-    public ResponseEntity<ProductListResponseDTO> getAllProducts(@RequestHeader String token, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
+    public ResponseEntity<ProductListResponseDTO> getAllProducts( @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
         /*
 
         UserDTO userDTO = authenticationCommons.validateToken(token);
@@ -52,7 +48,7 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ProductResponseDTO> addProduct(@RequestHeader("Authorization") String token, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ProductResponseDTO> addProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         /*
         UserDTO userDTO = authenticationCommons.validateToken(token);
         if(userDTO == null){
@@ -73,11 +69,14 @@ public class ProductController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<CategoryResponseDTO> addCategory(@RequestHeader("Authorization") String token, @RequestBody CategoryRequestDTO categoryRequestDTO) {
+    public ResponseEntity<CategoryResponseDTO> addCategory( @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        /*
         UserDTO userDTO = authenticationCommons.validateToken(token);
+
         if(userDTO == null){
             throw new InvalidTokenException("Invalid Token");
         }
+        */
         Category category = productService.createCategory(categoryRequestDTO.getName());
         CategoryResponseDTO responseDTO = ProductUtils.convertCategoryToCategoryResponseDTO(category);
         return ResponseEntity.ok(responseDTO);
