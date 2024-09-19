@@ -2,14 +2,16 @@ package org.scaler.ecommerceproductservice.security.configuration;
 
 import org.scaler.ecommerceproductservice.commons.AuthenticationCommons;
 import org.scaler.ecommerceproductservice.security.ProductServiceAuthenticationFilter;
+import org.scaler.ecommerceproductservice.security.handlers.ProductServiceAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 /**
  * @author: Vijaysurya Mandala
@@ -20,18 +22,24 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class ProductServiceSecurityConfiguration {
 
     private final AuthenticationCommons authenticationCommons;
-
+    private final ProductServiceAuthenticationEntryPoint productServiceAuthenticationEntryPoint;
     //constructor
-    public ProductServiceSecurityConfiguration(AuthenticationCommons authenticationCommons) {
+    public ProductServiceSecurityConfiguration(
+            AuthenticationCommons authenticationCommons,
+            ProductServiceAuthenticationEntryPoint productServiceAuthenticationEntryPoint
+    ) {
         this.authenticationCommons = authenticationCommons;
+        this.productServiceAuthenticationEntryPoint = productServiceAuthenticationEntryPoint;
     }
 
     @Bean
+    @Order(1)
     public ProductServiceAuthenticationFilter getProductServiceAuthenticationFilter(){
         return new ProductServiceAuthenticationFilter(authenticationCommons);
     }
 
     @Bean
+    @Order(2)
     public SecurityFilterChain productServiceFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -42,7 +50,10 @@ public class ProductServiceSecurityConfiguration {
                         .requestMatchers("/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(getProductServiceAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(productServiceAuthenticationEntryPoint)
+                )
+                .addFilterBefore(getProductServiceAuthenticationFilter(), AuthorizationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .build();

@@ -1,6 +1,8 @@
 package org.scaler.ecommerceproductservice.controlleradvices;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.scaler.ecommerceproductservice.dtos.ErrorResponseDTO;
 import org.scaler.ecommerceproductservice.exceptions.CategoryAlreadyExistsException;
 import org.scaler.ecommerceproductservice.exceptions.CategoryNotFoundException;
@@ -8,8 +10,10 @@ import org.scaler.ecommerceproductservice.exceptions.InvalidTokenException;
 import org.scaler.ecommerceproductservice.exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 import static java.time.LocalDateTime.now;
 
@@ -62,5 +66,26 @@ public class GlobalExceptionHandler {
                 .timestamp(now())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(HttpServletRequest request, HttpServletResponse response, ServletException exception) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .statusCode("401")
+                .message(exception.getMessage())
+                .timestamp(now())
+                .build();
+        return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(HttpServletRequest request, Exception exception) {
+        ErrorResponseDTO errorResponseDTO = ErrorResponseDTO.builder()
+                .message(exception.getMessage())
+                .statusCode("500")
+                .path(request.getRequestURI())
+                .timestamp(now())
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponseDTO);
     }
 }

@@ -29,13 +29,6 @@ public class ProductController {
 
     @GetMapping("/")
     public ResponseEntity<ProductListResponseDTO> getAllProducts( @RequestParam(required = false) Integer limit, @RequestParam(required = false) Integer offset) {
-        /*
-
-        UserDTO userDTO = authenticationCommons.validateToken(token);
-        if(userDTO == null){
-            throw new InvalidTokenException("Invalid Token");
-        }
-        */
         ProductListResponseDTO responseDTO = ProductUtils.convertProductListToProductListResponseDTO(productService.getAllProducts(limit, offset));
         return ResponseEntity.ok(responseDTO);
     }
@@ -49,12 +42,6 @@ public class ProductController {
 
     @PostMapping("/")
     public ResponseEntity<ProductResponseDTO> addProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
-        /*
-        UserDTO userDTO = authenticationCommons.validateToken(token);
-        if(userDTO == null){
-            throw new InvalidTokenException("Invalid Token");
-        }
-        */
         log.info("productRequestDTO: {}", productRequestDTO);
         Product product = productService.createProduct(productRequestDTO.getProductName(), productRequestDTO.getProductDescription(), productRequestDTO.getImageURL(), productRequestDTO.getCategoryName(), productRequestDTO.getAmount(), productRequestDTO.getDiscount(), productRequestDTO.getCurrencyCode());
         ProductResponseDTO responseDTO = ProductUtils.convertProductToProductResponseDTO(product);
@@ -70,13 +57,6 @@ public class ProductController {
 
     @PostMapping("/category")
     public ResponseEntity<CategoryResponseDTO> addCategory( @RequestBody CategoryRequestDTO categoryRequestDTO) {
-        /*
-        UserDTO userDTO = authenticationCommons.validateToken(token);
-
-        if(userDTO == null){
-            throw new InvalidTokenException("Invalid Token");
-        }
-        */
         Category category = productService.createCategory(categoryRequestDTO.getName());
         CategoryResponseDTO responseDTO = ProductUtils.convertCategoryToCategoryResponseDTO(category);
         return ResponseEntity.ok(responseDTO);
