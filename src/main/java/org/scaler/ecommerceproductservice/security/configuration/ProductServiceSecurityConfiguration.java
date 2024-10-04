@@ -3,9 +3,10 @@ package org.scaler.ecommerceproductservice.security.configuration;
 import org.scaler.ecommerceproductservice.commons.AuthenticationCommons;
 import org.scaler.ecommerceproductservice.security.ProductServiceAuthenticationFilter;
 import org.scaler.ecommerceproductservice.security.handlers.ProductServiceAuthenticationEntryPoint;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,13 +34,18 @@ public class ProductServiceSecurityConfiguration {
     }
 
     @Bean
-    @Order(1)
+    public FilterRegistrationBean<ProductServiceAuthenticationFilter> registration(ProductServiceAuthenticationFilter filter) {
+        FilterRegistrationBean<ProductServiceAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
     public ProductServiceAuthenticationFilter getProductServiceAuthenticationFilter(){
         return new ProductServiceAuthenticationFilter(authenticationCommons);
     }
 
     @Bean
-    @Order(2)
     public SecurityFilterChain productServiceFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -50,6 +56,7 @@ public class ProductServiceSecurityConfiguration {
                         .requestMatchers("/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(productServiceAuthenticationEntryPoint)
                 )

@@ -22,7 +22,7 @@ import static java.time.LocalDateTime.now;
  * @github: github/mandalavijaysurya (<a href="https://www.github.com/mandalavijaysurya"> Github</a>)
  */
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "org.scaler.ecommerceproductservice.controllers")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CategoryNotFoundException.class)

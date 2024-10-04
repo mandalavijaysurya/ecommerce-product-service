@@ -1,5 +1,5 @@
 package org.scaler.ecommerceproductservice.security.models;
-import lombok.Builder;
+
 import org.scaler.ecommerceproductservice.dtos.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

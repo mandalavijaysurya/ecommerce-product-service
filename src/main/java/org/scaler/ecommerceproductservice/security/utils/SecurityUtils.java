@@ -1,6 +1,5 @@
 package org.scaler.ecommerceproductservice.security.utils;
 
-import org.apache.catalina.User;
 import org.scaler.ecommerceproductservice.dtos.UserDTO;
 import org.scaler.ecommerceproductservice.security.models.ProductServiceUserDetails;
 
