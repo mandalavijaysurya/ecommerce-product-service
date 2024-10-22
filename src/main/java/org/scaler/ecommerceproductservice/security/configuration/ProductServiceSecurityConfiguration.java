@@ -54,13 +54,14 @@ public class ProductServiceSecurityConfiguration {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/product/**").permitAll()
+                        .requestMatchers("/search/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(productServiceAuthenticationEntryPoint)
                 )
-                .addFilterBefore(getProductServiceAuthenticationFilter(), AuthorizationFilter.class)
+//                .addFilterBefore(getProductServiceAuthenticationFilter(), AuthorizationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .build();
