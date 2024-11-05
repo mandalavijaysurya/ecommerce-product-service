@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.scaler.ecommerceproductservice.annotations.UUIDV6Generator;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public abstract class BaseModel {
+public abstract class BaseModel implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid-v6-generator")
     @UUIDV6Generator

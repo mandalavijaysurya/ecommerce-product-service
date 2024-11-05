@@ -14,6 +14,7 @@ import java.util.UUID;
  */
 public interface ProductService {
     List<Product> getAllProducts(Integer limit, Integer offset);
+    Product getProductById(UUID id);
     Product getProduct(String title);
     List<Product> getLimitedProducts(int limit);
     List<Product>  getAllProductsAndSort(String sort);

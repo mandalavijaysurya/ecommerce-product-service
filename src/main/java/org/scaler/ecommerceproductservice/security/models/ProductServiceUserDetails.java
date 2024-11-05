@@ -1,5 +1,6 @@
 package org.scaler.ecommerceproductservice.security.models;
 
+import org.scaler.ecommerceproductservice.dtos.RoleDTO;
 import org.scaler.ecommerceproductservice.dtos.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,12 @@ public class ProductServiceUserDetails implements UserDetails {
         this.userName = userDTO.getEmail();
         this.password = null;
         this.authorities = userDTO.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public ProductServiceUserDetails(String email, List<RoleDTO> roleDTOList){
+        this.userName = email;
+        this.authorities = roleDTOList.stream().map(roleDTO -> new SimpleGrantedAuthority(roleDTO.getName()))
                 .collect(Collectors.toList());
     }
 

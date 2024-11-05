@@ -33,6 +33,13 @@ public class ProductController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable String id){
+        Product product = productService.getProductById(UUID.fromString(id));
+        ProductResponseDTO responseDTO = ProductUtils.convertProductToProductResponseDTO(product);
+        return ResponseEntity.ok(responseDTO);
+    }
+
     @GetMapping("/title")
     public ResponseEntity<ProductResponseDTO> getProductByTitle(@RequestParam String title) {
         Product product = productService.getProduct(title);

@@ -2,7 +2,9 @@ package org.scaler.ecommerceproductservice.security.configuration;
 
 import org.scaler.ecommerceproductservice.commons.AuthenticationCommons;
 import org.scaler.ecommerceproductservice.security.ProductServiceAuthenticationFilter;
+import org.scaler.ecommerceproductservice.security.ProductServiceAuthenticationInternalFilter;
 import org.scaler.ecommerceproductservice.security.handlers.ProductServiceAuthenticationEntryPoint;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,15 +36,28 @@ public class ProductServiceSecurityConfiguration {
     }
 
     @Bean
-    public FilterRegistrationBean<ProductServiceAuthenticationFilter> registration(ProductServiceAuthenticationFilter filter) {
+    public FilterRegistrationBean<ProductServiceAuthenticationInternalFilter> registeringProductAuthenticationInternalFilter(@Qualifier("internal-login") ProductServiceAuthenticationInternalFilter internalFilterfilter) {
+        FilterRegistrationBean<ProductServiceAuthenticationInternalFilter> registration = new FilterRegistrationBean<>(internalFilterfilter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<ProductServiceAuthenticationFilter> registeringProductAuthenticationFilter(ProductServiceAuthenticationFilter filter) {
         FilterRegistrationBean<ProductServiceAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
         registration.setEnabled(false);
         return registration;
     }
 
     @Bean
-    public ProductServiceAuthenticationFilter getProductServiceAuthenticationFilter(){
+    public ProductServiceAuthenticationFilter getProductServiceAuthenticationFilter() {
         return new ProductServiceAuthenticationFilter(authenticationCommons);
+    }
+
+    @Bean
+    public ProductServiceAuthenticationInternalFilter getProductServiceAuthenticationInternalFilter(){
+//        return new ProductServiceAuthenticationFilter(authenticationCommons);
+        return new ProductServiceAuthenticationInternalFilter();
     }
 
     @Bean
@@ -61,7 +76,7 @@ public class ProductServiceSecurityConfiguration {
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(productServiceAuthenticationEntryPoint)
                 )
-//                .addFilterBefore(getProductServiceAuthenticationFilter(), AuthorizationFilter.class)
+                .addFilterBefore(getProductServiceAuthenticationInternalFilter(), AuthorizationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .build();

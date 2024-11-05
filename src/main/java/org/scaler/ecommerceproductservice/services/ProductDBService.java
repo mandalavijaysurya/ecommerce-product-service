@@ -10,6 +10,7 @@ import org.scaler.ecommerceproductservice.repositories.CategoryRepository;
 import org.scaler.ecommerceproductservice.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,12 +31,30 @@ public class ProductDBService implements ProductService{
     // Inject ProductRepository, CategoryRepository and PriceRepository using constructor injection
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public ProductDBService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductDBService(ProductRepository productRepository,
+                            CategoryRepository categoryRepository,
+                            RedisTemplate<String, Object> redisTemplate
+    ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.redisTemplate = redisTemplate;
     }
-
+    // Implement this method to return the product with the given id, if the product is not found, return "Product not found"
+    @Override
+    public Product getProductById(UUID id) throws ProductNotFoundException {
+        Product productFromCache = (Product) redisTemplate.opsForValue().get(id.toString());
+        if(productFromCache != null){
+            return productFromCache;
+        }
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()){
+            throw new ProductNotFoundException("Product not found");
+        }
+        redisTemplate.opsForValue().set(id.toString(), product.get());
+        return product.get();
+    }
     // Implement this method to return all products, use productRepository to fetch all products in paginated manner
     @Override
     public List<Product> getAllProducts(Integer limit, Integer offset) {
